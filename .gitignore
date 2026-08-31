@@ -1,0 +1,13 @@
+# Queue state and submitted job copies
+/pending/
+/running/
+/finished/
+/failed/
+
+# Local test/debug artifacts
+/find_file.sh
+/non_dummy_test_result.txt
+*.log
+
+# Local configuration
+.env
