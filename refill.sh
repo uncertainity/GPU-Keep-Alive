@@ -12,6 +12,7 @@ if [[ $# -gt 1 ]]; then
 fi
 
 fallback_job="${1:-${GPU_KEEPALIVE_FALLBACK_JOB:-}}"
+fallback_gpus="${GPU_KEEPALIVE_FALLBACK_GPUS:-${GPU_KEEPALIVE_GPUS:-0}}"
 
 if [[ -z "$fallback_job" ]]; then
     echo "Usage: $0 <path-to-fallback-job.sh>" >&2
@@ -27,10 +28,10 @@ fi
 mkdir -p "$PENDING_DIR"
 
 while true; do
-    pending_count=$(find "$PENDING_DIR" -maxdepth 1 -type f | wc -l)
+    pending_count=$(find "$PENDING_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l)
 
     if [[ "$pending_count" -eq 0 ]]; then
-        "$SUBMIT_SCRIPT" "$fallback_job"
+        "$SUBMIT_SCRIPT" --gpus "$fallback_gpus" "$fallback_job"
     fi
 
     sleep 5
